@@ -1,4 +1,6 @@
 import React, {Component} from "react"
+import {connect} from "react-redux"
+import {} from "react-router-dom"
 
 import {
     NavBar,
@@ -9,13 +11,25 @@ import {
     WhiteSpace
 } from 'antd-mobile'
 import Logo from "../../components/logo/logo"
+import {login} from "../../redux/actions"
 
-export default class Login extends Component {
+
+class Login extends Component {
 
     state = {
         username: "",
         password: "",
     }
+
+    componentDidUpdate(){
+        const {code,msg}=this.props.user
+        if(code===0){
+
+        }else if(code===1){
+
+        }
+    }
+
     inputHandler = (name, val) => {
         this.setState({
             [name]: val
@@ -24,6 +38,8 @@ export default class Login extends Component {
 
     loginHandler = () => {
         console.log(this.state)
+        const {username,password}=this.state
+        this.props.login({username,password})
     }
 
     toRegister = () => {
@@ -31,6 +47,7 @@ export default class Login extends Component {
     }
 
     render() {
+        const {username,password}=this.state
         return (
             <div>
                 <NavBar>硅谷直聘</NavBar>
@@ -47,7 +64,7 @@ export default class Login extends Component {
                             onChange={val => this.inputHandler("password", val)}
                         >密码：</InputItem>
                         <WhiteSpace></WhiteSpace>
-                        <Button type="primary" onClick={this.loginHandler}>登陆</Button>
+                        <Button type="primary" onClick={this.loginHandler} disabled={username==="" || password===""}>登陆</Button>
                         <WhiteSpace></WhiteSpace>
                         <Button onClick={this.toRegister}>无账号</Button>
                     </List>
@@ -56,3 +73,8 @@ export default class Login extends Component {
         )
     }
 }
+
+export default connect(
+    state => ({user:state.user}),
+    {login}
+)(Login)
