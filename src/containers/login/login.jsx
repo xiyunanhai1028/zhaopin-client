@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import {connect} from "react-redux"
-import {} from "react-router-dom"
+import {Redirect} from "react-router-dom"
 
 import {
     NavBar,
@@ -8,7 +8,8 @@ import {
     List,
     InputItem,
     Button,
-    WhiteSpace
+    WhiteSpace,
+    Toast
 } from 'antd-mobile'
 import Logo from "../../components/logo/logo"
 import {login} from "../../redux/actions"
@@ -21,12 +22,14 @@ class Login extends Component {
         password: "",
     }
 
-    componentDidUpdate(){
-        const {code,msg}=this.props.user
-        if(code===0){
-
-        }else if(code===1){
-
+    componentDidUpdate() {
+        const {code, msg}=this.props.user
+        if (code === 0) {//注册成功
+            Toast.success('登录成功', 1);
+            this.props.user.code = -1
+        } else if (code === 1) {//注册失败
+            Toast.fail(msg, 1);
+            this.props.user.code = -1
         }
     }
 
@@ -38,8 +41,8 @@ class Login extends Component {
 
     loginHandler = () => {
         console.log(this.state)
-        const {username,password}=this.state
-        this.props.login({username,password})
+        const {username, password}=this.state
+        this.props.login({username, password})
     }
 
     toRegister = () => {
@@ -47,7 +50,11 @@ class Login extends Component {
     }
 
     render() {
-        const {username,password}=this.state
+        const {username, password}=this.state
+        const {code, redirectTo}=this.props.user
+        if (code === 0) {//注册成功
+            return <Redirect to={redirectTo}/>
+        }
         return (
             <div>
                 <NavBar>硅谷直聘</NavBar>
@@ -64,7 +71,8 @@ class Login extends Component {
                             onChange={val => this.inputHandler("password", val)}
                         >密码：</InputItem>
                         <WhiteSpace></WhiteSpace>
-                        <Button type="primary" onClick={this.loginHandler} disabled={username==="" || password===""}>登陆</Button>
+                        <Button type="primary" onClick={this.loginHandler}
+                                disabled={username === "" || password === ""}>登陆</Button>
                         <WhiteSpace></WhiteSpace>
                         <Button onClick={this.toRegister}>无账号</Button>
                     </List>
@@ -75,6 +83,6 @@ class Login extends Component {
 }
 
 export default connect(
-    state => ({user:state.user}),
+    state => ({user: state.user}),
     {login}
 )(Login)

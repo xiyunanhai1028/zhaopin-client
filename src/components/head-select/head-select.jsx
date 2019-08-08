@@ -12,8 +12,8 @@ class HeadSelect extends Component {
         this.headerList = []
         for (let i = 0; i < 20; i++) {
             this.headerList.push({
-                icon: require(`./images/头像${i + 1}.png`),
-                text: `图像${i + 1}`,
+                icon: require(`../../assets/images/头像${i + 1}.png`),
+                text: `头像${i + 1}`,
             })
         }
     }

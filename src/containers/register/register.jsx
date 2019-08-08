@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import {connect} from "react-redux"
-// import {Redirect} from "react-router-dom"
+import {Redirect} from "react-router-dom"
 
 import {
     NavBar,
@@ -31,12 +31,14 @@ class Register extends Component {
     }
 
     componentDidUpdate() {
+        console.log("---", this.props.user)
         const {code, msg}=this.props.user
         if (code === 0) {//注册成功
             Toast.success('注册成功', 1);
-            this.toLogin()
+            this.props.user.code = -1
         } else if (code === 1) {//注册失败
             Toast.fail(msg, 1);
+            this.props.user.code = -1
         }
     }
 
@@ -56,6 +58,12 @@ class Register extends Component {
 
     render() {
         const {username, password, password2, type}=this.state
+
+        const {code, redirectTo}=this.props.user
+        if (code === 0) {//注册成功
+            return <Redirect to={redirectTo}/>
+        }
+
         return (
             <div>
                 <NavBar>硅谷直聘</NavBar>

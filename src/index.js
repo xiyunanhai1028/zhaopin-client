@@ -10,7 +10,7 @@ import {Switch, Route, HashRouter} from "react-router-dom"
 import Register from "./containers/register/register"
 import Login from "./containers/login/login"
 import Main from "./containers/main/main"
-
+// import "./test/socket_test"
 ReactDOM.render((
     <Provider store={store}>
         <HashRouter>
